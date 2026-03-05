@@ -113,4 +113,3 @@ PRONTO PARA DECOLAR
 
 - **`main.ipynb`** – Notebook com telemetria, verificação de condições e execução.
 - **`readme.md`** – Este arquivo (explicação, prints e instruções de execução).
-# cs_fase1
