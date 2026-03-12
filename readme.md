@@ -21,49 +21,65 @@ Este projeto simula um **sistema de telemetria e verificação de condições** 
 
 3. **Resultado** – O sistema retorna **"PRONTO PARA DECOLAR"** se tudo estiver ok, ou uma mensagem de **"DECOLAGEM ABORTADA"** com o motivo (ex.: temperatura fora da faixa, energia insuficiente, etc.).
 
+4. **Análise IA** – A função `analise_ia()` processa os dados e retorna:
+   - **Classificação** dos parâmetros (ex.: temperatura interna ALTA/NORMAL, pressão PRÓXIMA DO LIMITE)
+   - **Anomalias detectadas** (ex.: temperatura externa muito baixa, pressão próxima do limite)
+   - **Sugestões de risco** (ex.: margem energética baixa, possível falha de subsistema crítico)
+
 Os dados são gerados de forma aleatória a cada execução, então o resultado pode variar entre "PRONTO PARA DECOLAR" e "DECOLAGEM ABORTADA".
 
 ---
 
 ## Prints da execução
 
-### Exemplo 1 – Decolagem abortada (temperatura interna)
+A saída é organizada em três blocos: **Telemetria recebida** (dados formatados por categoria), **Resultado da verificação** (pronto/abortado) e **Análise assistida por IA** (classificação, anomalias e riscos).
+
+### Exemplo 1 – Decolagem abortada
 
 ```
-Dados recebidos da API:
-temperatura_interna : 17.993242370343765
-temperatura_externa : 12.717041484312816
-integridade_estrutural : 1
-energia_capacidade_total : 1000
-carga_atual_percentual : 63.694666201184674
-consumo_decolagem : 400
-perdas_energeticas : 36.79259378943534
-pressao_tanques : 4.744940285949863
-modulos_criticos : {'navegacao': True, 'comunicacao': True, 'controle_voo': True}
+================ TELEMETRIA RECEBIDA ================
 
-Resultado da verificação:
+Temperaturas
+  Interna : 17.09 °C
+  Externa : 7.10 °C
+
+Estrutura
+  Integridade estrutural : OK
+
+Energia
+  Capacidade total       : 1000 kWh
+  Carga atual            : 89.47 %
+  Consumo decolagem      : 400 kWh
+  Perdas energéticas     : 14.44 kWh
+
+Propulsão
+  Pressão dos tanques    : 3.58 bar
+
+Módulos críticos
+  navegacao       : OK
+  comunicacao     : FALHA
+  controle_voo    : OK
+
+================ RESULTADO DA VERIFICAÇÃO ================
 DECOLAGEM ABORTADA - Temperatura interna fora da faixa segura
+
+================ ANÁLISE ASSISTIDA POR IA ================
+
+Classificação dos dados
+  temperatura_interna  : NORMAL
+
+Anomalias detectadas
+  Nenhuma anomalia detectada
+
+Sugestões de risco
+  - Possível falha de subsistema crítico
+
+==========================================================
 ```
 
 ### Exemplo 2 – Pronto para decolar
 
-Quando todas as condições são atendidas, a saída pode ser:
-
-```
-Dados recebidos da API:
-temperatura_interna : 22.5
-temperatura_externa : 25.0
-integridade_estrutural : 1
-energia_capacidade_total : 1000
-carga_atual_percentual : 85.0
-consumo_decolagem : 400
-perdas_energeticas : 30.0
-pressao_tanques : 3.8
-modulos_criticos : {'navegacao': True, 'comunicacao': True, 'controle_voo': True}
-
-Resultado da verificação:
-PRONTO PARA DECOLAR
-```
+Quando todas as condições são atendidas, a saída terá **RESULTADO DA VERIFICAÇÃO: PRONTO PARA DECOLAR** e a seção de análise pode mostrar classificações, anomalias ou riscos conforme os valores gerados.
 
 *(Os valores exatos mudam a cada execução por causa do uso de `random`.)*
 
@@ -102,7 +118,7 @@ PRONTO PARA DECOLAR
 
 ### Opção 2 – Executar como script Python
 
-1. Salve o conteúdo das células de código do `main.ipynb` em um arquivo `.py` (por exemplo `main.py`) com as funções `obter_dados_sistema`, `verificar_condicoes` e o bloco `if __name__ == "__main__": main()`.
+1. Salve o conteúdo das células de código do `main.ipynb` em um arquivo `.py` (por exemplo `main.py`) com as funções `obter_dados_sistema`, `verificar_condicoes`, `analise_ia` e o bloco `if __name__ == "__main__": main()`.
 
 2. No terminal, na pasta do projeto:
    ```bash
@@ -111,5 +127,9 @@ PRONTO PARA DECOLAR
 
 ### Estrutura do projeto
 
-- **`main.ipynb`** – Notebook com telemetria, verificação de condições e execução.
-- **`readme.md`** – Este arquivo (explicação, prints e instruções de execução).
+- **`main.ipynb`** – Notebook organizado em 4 partes:
+  1. **Telemetria** – `obter_dados_sistema()` (simulação da API)
+  2. **Verificação das condições** – `verificar_condicoes()` (validação para decolagem)
+  3. **Análise IA** – `analise_ia()` (classificação, anomalias e sugestões de risco)
+  4. **Execução** – `main()` (exibe telemetria formatada, resultado da verificação e análise IA)
+- **`README.md`** – Este arquivo (explicação, exemplos de saída e instruções de execução).
